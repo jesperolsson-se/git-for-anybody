@@ -2,6 +2,6 @@
 *.log
 *.nav
 *.out
-*.pdf
 *.snm
 *.toc
+slides.pdf
