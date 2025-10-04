@@ -14,10 +14,10 @@
 
 \institute{}
 
-\AtBeginSection[]
+\AtBeginSubsection[]
 {
   \begin{frame}
-    \tableofcontents[currentsection]
+    \tableofcontents[currentsection, currentsubsection]
   \end{frame}
 }
 
@@ -28,6 +28,8 @@
 \frame{\titlepage}
 
 \section{Git, briefly}
+
+\subsection{Version control}
 
 \begin{frame}{Version control}
     \begin{center}
@@ -70,4 +72,157 @@
         \includegraphics[height=8cm]{Version_control_5.pdf}
     \end{textblock*}
 \end{frame}
+
+\subsection{Exercise 1}
+
+\begin{frame}{Queries}
+    \begin{center}
+        \huge Git is version control that you can query
+    \end{center}
+    \vfill
+    \centering
+    \small{Download and run \texttt{exercise1.sh} to follow along}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large What does the version history look like?
+
+    \pause
+    \vspace{\baselineskip}
+    \small{\texttt{git log} (with some optional parameters)
+
+    alias: \texttt{git lg}.}
+
+    \vspace{\baselineskip}
+    \includegraphics[width=\textwidth]{history.png}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large Who were the members at the end of 2025 Q1?
+
+    \pause
+    \vspace{\baselineskip}
+    \small{\texttt{git checkout 2025-Q1}
+
+    or preferably: \texttt{git switch --detach 2025-Q1}.}
+
+    \vspace{\baselineskip}
+    \includegraphics[height=5cm]{membership_2025_Q1.png}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large How did membership change in the previous quarter?
+
+    \pause
+    \vspace{\baselineskip}
+    \small{\texttt{git diff 2025-Q1 2025-Q2}}
+
+    \vspace{\baselineskip}
+    \includegraphics[height=5cm]{diff_Q1_Q2.png}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large When did Aristotle become a member?
+
+    \pause
+    \vspace{\baselineskip}
+    \small{\texttt{git bisect start main founding}
+
+    \vspace{\baselineskip}
+    optional automation:
+
+    \texttt{git bisect run sh -c '! grep -q Aristotle membership'}}
+
+    \vspace{\baselineskip}
+    \includegraphics[width=\textwidth]{bisect_aristotle.png}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large What changes affected Pythagoras?
+
+    \pause
+    \vspace{\baselineskip}
+    \small{\texttt{git log -L '/Pythagoras of Samos/,+1:membership'}
+
+    \vspace{\baselineskip}
+    alternatively, using line number:
+
+    \texttt{git log -L 19,+1:membership}}
+
+    \vspace{\baselineskip}
+    \includegraphics[height=5cm]{log_pythagoras.png}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large What has Bob done since Q1?
+
+    \pause
+    \vspace{\baselineskip}
+    \small{\texttt{git lg --author=Bob 2025-Q1..main}
+
+    \vspace{\baselineskip}
+    or simply:
+
+    \texttt{git log --author=Bob 2025-Q1..main}}
+
+    \vspace{\baselineskip}
+    \includegraphics[width=\textwidth]{bob_Q1.png}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large When did we reach 20 members?
+
+    \pause
+    \vspace{\baselineskip}
+    \small{\texttt{git bisect start main founding}
+
+    \vspace{\baselineskip}
+    optional automation: \texttt{git bisect run} \textbackslash
+
+    \texttt{bash -c '[ \$(wc -l < membership) -lt 20 ]'}}
+
+    \vspace{\baselineskip}
+    \includegraphics[height=5cm]{bisect_20_members.png}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large At each point in the history, how many members were there?
+
+    \pause
+    \vspace{\baselineskip}
+
+    \begin{columns}[onlytextwidth]
+        \begin{column}{0.85\textwidth}
+            \small{\texttt{git rebase --exec "wc -l < membership"} \textbackslash
+
+            \texttt{founding$\sim$ 2> /dev/null}
+
+                \vspace{\baselineskip}
+                alternatively:
+                \vspace{\baselineskip}
+
+                \texttt{git rev-list --reverse main |}
+
+                \texttt{while read commit; do}
+
+                \texttt{    git checkout --quiet \$commit}
+
+                \texttt{    wc -l < membership}
+
+                \texttt{done}}
+        \end{column}
+        \begin{column}{0.15\textwidth}
+            \includegraphics[height=5cm]{historical_count.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \end{document}
