@@ -4,7 +4,7 @@ mkdir Exercise1
 cd Exercise1
 
 # Initial commit
-git init
+git init --initial-branch=main
 touch membership
 git add membership
 GIT_AUTHOR_NAME='Admin' GIT_AUTHOR_EMAIL='admin@example.com' GIT_AUTHOR_DATE='2025-01-01T00:00:01+0000' \
